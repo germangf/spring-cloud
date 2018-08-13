@@ -1,0 +1,42 @@
+spring:
+  application:
+    name: auth-server
+    
+server:
+  port: 9999
+  servlet:
+    context-path: /uaa
+  ssl:
+    enabled: true
+    key-alias: serverkey
+    key-store: c:/dev/ssh/serverkeystore.p12
+    key-store-password: changeit
+    key-password: changeit
+
+eureka:
+  instance:
+    nonSecurePortEnabled: false
+    securePortEnabled: true
+  client:
+    serviceUrl:
+      defaultZone: https://192.168.124.128:8761/eureka/
+
+security:
+  oauth2:
+    client:
+      clientId: confidential
+      clientSecret: 1e8a7f99-d65c-4d94-9676-b315a7a3a337
+  jwt:
+    keyPair: jwt
+    keyStore: jwt.jks
+    keyStorePassword: mySecretKey
+
+ribbon:
+  isSecured: true
+
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG
+      

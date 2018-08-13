@@ -1,0 +1,36 @@
+spring:
+  application:
+    name: avaloq-resource
+    
+server:
+  port: 8710
+  ssl:
+    enabled: true
+    key-alias: serverkey
+    key-store: c:/dev/ssh/serverkeystore.p12
+    key-store-password: changeit
+    key-password: changeit
+
+eureka:
+  instance:
+    nonSecurePortEnabled: false
+    securePortEnabled: true
+  client:
+    serviceUrl:
+      defaultZone: https://192.168.124.128:8761/eureka/
+
+ribbon:
+  isSecured: true
+    
+security:
+  jwt:
+    keyPair: jwt
+    keyStore: jwt.jks
+    keyStorePassword: mySecretKey
+
+logging:
+  level:
+    org:
+      springframework: 
+        security: WARN
+        oauth2: WARN

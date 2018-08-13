@@ -1,0 +1,63 @@
+spring:
+  application:
+    name: gateway-application
+    
+server:
+  port: 8700
+  ssl:
+    enabled: true
+    key-alias: serverkey
+    key-store: c:/dev/ssh/serverkeystore.p12
+    key-store-password: changeit
+    key-password: changeit
+  
+eureka:
+  instance:
+    nonSecurePortEnabled: false
+    securePortEnabled: true
+  client:
+    serviceUrl:
+      defaultZone: https://192.168.124.128:8761/eureka/
+
+zuul:
+  prefix: /api
+  trace-request-body: true
+  ignoredServices: '*'
+  sensitiveHeaders:
+  routes:
+    uaa:
+      path: /uaa/**
+      serviceId: auth-server
+      stripPrefix: true
+    avaloq: 
+      path: /avaloq/**
+      serviceId: avaloq-resource
+      stripPrefix: false
+    trx: 
+      path: /trx/**
+      serviceId: trx-resource
+      stripPrefix: false
+    bonita: 
+      path: /bonita/**
+      serviceId: bonita-resource
+      stripPrefix: false
+  
+ribbon:
+  isSecured: true
+    
+security:
+  oauth2:
+    client:
+      accessTokenUri: https://192.168.124.128:9999/uaa/oauth/token
+      userAuthorizationUri: https://192.168.124.128:9999/uaa/oauth/authorize
+      clientId: confidential
+    resource:
+      userInfoUri: https://192.168.124.128:9999/uaa/user
+  
+logging:
+  level:
+    org:
+      springframework: 
+        security: WARN
+        oauth2: WARN
+  

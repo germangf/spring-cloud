@@ -1,0 +1,126 @@
+buildscript {
+	ext {
+		springBootVersion = '2.0.2.RELEASE'
+	}
+  repositories {
+    if (project.hasProperty('nexus')) {
+      maven { url nexus }
+    }
+    mavenCentral()
+  }
+	dependencies {
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+	}
+}
+
+plugins {
+//  id "org.asciidoctor.convert" version "1.5.7"
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+apply plugin: 'jacoco'
+apply plugin: 'checkstyle'
+apply plugin: 'pmd'
+//apply plugin: 'findbugs'
+
+group = 'ch.bbva'
+
+repositories {
+  if (project.hasProperty('nexus')) {
+    maven { url nexus }
+  }
+}
+
+ext {
+	springCloudVersion = 'Finchley.RC1'
+	jaxbImplVersion = '2.3.0'
+	javaxActivationVersion = '1.1.1'
+	lilaVersion = '0.5.0'
+	guavaVersion = '23.0'
+	sqlserverVersion = '4.0'
+	snippetsDir = file('build/generated-snippets')
+}
+
+dependencies {
+  compile("org.springframework.security.oauth.boot:spring-security-oauth2-autoconfigure")
+	compile("org.springframework.boot:spring-boot-starter-web")
+  compile("ch.bbva:lila:${lilaVersion}")
+	compile("org.springframework:spring-jdbc")
+  compile("org.apache.commons:commons-dbcp2")
+	compile("com.google.guava:guava:${guavaVersion}")
+
+  runtime("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client")
+	runtime("org.springframework.boot:spring-boot-starter-security")
+  runtime("com.microsoft.sqlserver:sqljdbc4:${sqlserverVersion}")
+
+	runtime('org.springframework.boot:spring-boot-devtools')
+
+	runtime("javax.xml.bind:jaxb-api")
+	runtime("com.sun.xml.bind:jaxb-impl:${jaxbImplVersion}")
+	runtime("com.sun.xml.bind:jaxb-core:${jaxbImplVersion}")
+	runtime("javax.activation:activation:${javaxActivationVersion}")
+	
+	//asciidoctor("org.springframework.restdocs:spring-restdocs-asciidoctor")
+	
+	testCompile('org.springframework.boot:spring-boot-starter-test')
+	testCompile('org.springframework.security:spring-security-test')
+	testCompile("org.springframework.restdocs:spring-restdocs-mockmvc")
+}
+
+dependencyManagement {
+	imports {
+		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+	}
+}
+
+/*
+test {
+	outputs.dir snippetsDir
+}
+
+asciidoctor {
+	inputs.dir snippetsDir
+	dependsOn test
+}
+
+jar {
+	dependsOn asciidoctor
+	from ("${asciidoctor.outputDir}/html5") {
+		into 'static/docs'
+	}
+}
+*/
+/*
+checkstyle {
+	toolVersion "8.10"
+}
+*/
+
+/*
+findbugs {
+	ignoreFailures = true
+	findbugsTest.enabled = false
+}
+
+tasks.withType(FindBugs) {
+	reports {
+		xml.enabled = false
+		html.enabled = true
+	}
+}
+*/
+
+pmd {
+	ignoreFailures = true
+	pmdTest.enabled = false
+}
+
+tasks.withType(Pmd) {
+	reports {
+		xml.enabled = false
+		html.enabled = true
+	}
+}

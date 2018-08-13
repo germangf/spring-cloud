@@ -1,0 +1,53 @@
+buildscript {
+	ext {
+		springBootVersion = '2.0.2.RELEASE'
+	}
+  repositories {
+    if (project.hasProperty('nexus')) {
+      maven { url nexus }
+    }
+    mavenCentral()
+  }
+	dependencies {
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+	}
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+
+group = 'ch.bbva'
+
+repositories {
+  if (project.hasProperty('nexus')) {
+    maven { url nexus }
+  }
+}
+
+ext {
+	springCloudVersion = 'Finchley.RC1'
+	jaxbImplVersion = '2.3.0'
+	javaxActivationVersion = '1.1.1'
+}
+
+dependencies {
+  compile("org.springframework.cloud:spring-cloud-starter-netflix-eureka-server")
+	
+	runtime("org.springframework.boot:spring-boot-devtools")
+
+	runtime("javax.xml.bind:jaxb-api")
+	runtime("com.sun.xml.bind:jaxb-impl:${jaxbImplVersion}")
+	runtime("com.sun.xml.bind:jaxb-core:${jaxbImplVersion}")
+	runtime("javax.activation:activation:${javaxActivationVersion}")
+
+	testCompile("org.springframework.boot:spring-boot-starter-test")
+	testCompile("junit:junit")
+}
+
+dependencyManagement {
+	imports {
+		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+	}
+}

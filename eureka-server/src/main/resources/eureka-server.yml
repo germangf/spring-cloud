@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: eureka-server
+
+server:
+  port: 8761
+  ssl:
+    enabled: true
+    key-alias: serverkey
+    key-store: c:/dev/ssh/serverkeystore.p12
+    key-store-password: changeit
+    key-password: changeit
+
+eureka:
+  instance:
+    hostname: localhost
+    nonSecurePortEnabled: false
+    securePortEnabled: true
+  client:
+    registerWithEureka: false
+    fetchRegistry: false
